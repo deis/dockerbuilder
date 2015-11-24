@@ -57,8 +57,17 @@ func main() {
 		os.Exit(1)
 	}
 
+	cmd = exec.Command("tar", "xvzf", target)
+	cmd.Env = os.Environ()
+	cmd.Dir = tmp
+	out, err = cmd.CombinedOutput()
+	if err != nil {
+		log.Printf("[ERROR], running %s [%s]", cmdToStr(cmd), err)
+		os.Exit(1)
+	}
+
 	// docker build
-	cmd := exec.Command("docker", "build", "-t", imgName, ".")
+	cmd = exec.Command("docker", "build", "-t", imgName, ".")
 	cmd.Env = os.Environ()
 	cmd.Dir = tmp
 
