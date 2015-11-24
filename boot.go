@@ -78,7 +78,7 @@ func main() {
 	}
 
 	// docker push
-	cmd := exec.Command("docker", "push", imgName)
+	cmd = exec.Command("docker", "push", imgName)
 	cmd.Env = os.Environ()
 	cmd.Dir = tmp
 	out, err = cmd.CombinedOutput()
