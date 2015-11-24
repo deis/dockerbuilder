@@ -5,16 +5,13 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/codegangsta/cli"
 )
 
-const usage = `
-All services should provide a top-level Go program named "boot.go", compiled
-to "boot". This should go in rootfs/bin/boot, and should be the entry point
-for all Deis components.
+const description = "dockerbuilder is a simple program that downloads code, runs 'docker build' and 'docker run'. It's intended (but not required) for use with the Deis builder (https://github.com/deis/builder), which launches it as a Kubernetes pod to handle Dockerfile based builds."
 
-An exception to this is components that may be started without a boot, or which
-may be started with a simple (<20 line) shell script.
-`
+const runUsage = "download a gzipped tarball (*.tar.gz file) from a S3-compatible endpoint specified at $TAR_URL (environment variable) to a temporary directory, unzip it and then run 'docker build -t $IMG_NAME .' and 'docker run $IMG_NAME' on it"
 
 const prefix = "--->"
 
@@ -41,6 +38,24 @@ func printAndRun(cmd *exec.Cmd) {
 }
 
 func main() {
+	app := cli.NewApp()
+	app.Name = "dockerbuilder"
+	app.Usage = description
+
+	app.Commands = []cli.Command{
+		{
+			Name:        "run",
+			Aliases:     []string{"r"},
+			Usage:       runUsage,
+			Description: runUsage,
+			Action:      run,
+		},
+	}
+
+	app.Run(os.Args)
+}
+
+func run(c *cli.Context) {
 	tmp := os.TempDir()
 	// TODO: better perms for this dir
 	if err := os.MkdirAll(tmp, os.ModePerm); err != nil {
