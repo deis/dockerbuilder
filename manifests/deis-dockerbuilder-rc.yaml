@@ -21,4 +21,4 @@ spec:
     spec:
       containers:
         - name: deis-dockerbuilder
-        image: arschles/dockerbuilder
+        image: arschles/dockerbuilder:0.0.1-20151124102330
