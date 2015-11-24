@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 const usage = `
@@ -16,8 +17,23 @@ An exception to this is components that may be started without a boot, or which
 may be started with a simple (<20 line) shell script.
 `
 
+func cmdToStr(cmd *exec.Command) string {
+	return strings.Join(cmd.Args)
+}
+
 func main() {
 	tmp := os.TempDir()
+	// TODO: better perms for this dir
+	if err := os.MkdirAll(tmp, os.ModePerm); err != nil {
+		log.Printf("[ERROR] creating temporary directory %s [%s]", tmp, err)
+		os.Exit(1)
+	}
+	defer func() {
+		if err := os.Remove(tmp); err != nil {
+			log.Printf("[ERROR] removing temporary directory %s [%s]", tmp, err)
+			os.Exit(1)
+		}
+	}()
 
 	tarURL := os.Getenv("TAR_URL")
 	if tarURL == "" {
@@ -42,11 +58,25 @@ func main() {
 	}
 
 	// docker build
-
 	cmd := exec.Command("docker", "build", "-t", imgName, ".")
 	cmd.Env = os.Environ()
+	cmd.Dir = tmp
+
+	out, err = cmd.CombinedOutput()
+	if err != nil {
+		log.Printf("[ERROR] running %s [%s]", cmdToStr(cmd), err)
+		os.Exit(1)
+	}
 
 	// docker push
+	cmd := exec.Command("docker", "push", imgName)
+	cmd.Env = os.Environ()
+	cmd.Dir = tmp
+	out, err = cmd.CombinedOutput()
+	if err != nil {
+		log.Printf("[ERROR] running %s [%s]", cmdToStr(cmd), err)
+		os.Exit(1)
+	}
 
 	fmt.Println(usage)
 }
