@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -13,7 +14,11 @@ const description = "dockerbuilder is a simple program that downloads code, runs
 
 const runUsage = "download a gzipped tarball (*.tar.gz file) from a S3-compatible endpoint specified at $TAR_URL (environment variable) to a temporary directory, unzip it and then run 'docker build -t $IMG_NAME .' and 'docker run $IMG_NAME' on it"
 
-const prefix = "--->"
+const (
+	prefix             = "--->"
+	accessKeyEnvVar    = "ACCESS_KEY_FILE"
+	accessSecretEnvVar = "ACCESS_SECRET_FILE"
+)
 
 func printf(fmtStr string, args ...interface{}) {
 	fmt.Printf(fmtStr+"\n", args...)
@@ -35,6 +40,30 @@ func printAndRun(cmd *exec.Cmd) {
 		os.Exit(1)
 	}
 	printf(string(out))
+}
+
+// readAccessKeyAndSecret attempts to
+func readAccessKeyAndSecret() ([]byte, []byte, error) {
+	keyLoc := os.Getenv(accessKeyEnvVar)
+	if keyLoc == "" {
+		return nil, nil, fmt.Errorf("missing %s", accessKeyEnvVar)
+	}
+
+	secretLoc := os.Getenv(accessSecretEnvVar)
+	if secretLoc == "" {
+		return nil, nil, fmt.Errorf("missing %s", accessSecretEnvVar)
+	}
+
+	accessKey, err := ioutil.ReadFile(keyLoc)
+	if err != nil {
+		return nil, nil, fmt.Errorf("reading %s [%s]", keyLoc, err)
+	}
+
+	accessSecret, err := ioutil.ReadFile(secretLoc)
+	if err != nil {
+		return nil, nil, fmt.Errorf("reading %s [%s]", secretLoc, err)
+	}
+	return accessKey, accessSecret, nil
 }
 
 func main() {
@@ -81,10 +110,21 @@ func run(c *cli.Context) {
 		os.Exit(1)
 	}
 
+	// configure key and secret
+	accessKey, accessSecret, err := readAccessKeyAndSecret()
+	if err != nil {
+		errf("error reading access key and secret [%s]", err)
+		os.Exit(1)
+	}
+
+	cmd := exec.Command("mc", "config", "host", "add", tarURL, string(accessKey), string(accessSecret))
+	cmd.Env = os.Environ()
+	printAndRun(cmd)
+
 	target := fmt.Sprintf("%s/%s", tmp, tarURL)
 
 	// download from object storage
-	cmd := exec.Command("mc", "cp", tarURL, target)
+	cmd = exec.Command("mc", "cp", tarURL, target)
 	printAndRun(cmd)
 
 	cmd = exec.Command("tar", "xvzf", target)
