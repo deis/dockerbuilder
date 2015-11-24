@@ -51,7 +51,7 @@ docker-build: build-alpine
 	docker build --rm -t ${IMAGE} .
 
 # Push to a registry that Kubernetes can access.
-docker-push:
+docker-push: docker-build
 	docker push ${IMAGE}
 
 # Deploy is a Kubernetes-oriented target
