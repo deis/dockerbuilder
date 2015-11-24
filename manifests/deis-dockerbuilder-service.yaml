@@ -1,8 +1,10 @@
+# note deis builder (https://github.com/deis/builder) runs one deis-dockerbuilder pod per build,
+# so it doesn't use this manifest
 apiVersion: v1
 kind: Service
 metadata:
   # Give this a useful name.
-  name: deis-example
+  name: deis-dockerbuilder
   labels:
     heritage: deis
 spec:
@@ -13,4 +15,4 @@ spec:
       protocol: TCP
   selector:
     # Match the selector in the RC
-    app: deis-example
+    app: deis-dockerbuilder
