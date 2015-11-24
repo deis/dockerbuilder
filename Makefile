@@ -24,7 +24,7 @@ DEIS_REGISTY ?= ${DEV_REGISTRY}
 # Kubernetes-specific information for RC, Service, and Image.
 RC := manifests/deis-${SHORT_NAME}-rc.yaml
 SVC := manifests/deis-${SHORT_NAME}-service.yaml
-IMAGE := deis/${SHORT_NAME}:${VERSION}
+IMAGE := arschles/${SHORT_NAME}:${VERSION}
 
 all:
 	@echo "Use a Makefile to control top-level building of the project."
