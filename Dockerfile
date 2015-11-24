@@ -1,4 +1,4 @@
-FROM golang:1.5
+FROM alpine:3.1
 
 ENV VERSION 0.0.1
 ENV GO15VENDOREXPERIMENT 1
@@ -7,4 +7,5 @@ ENV LDFLAGS "-s -X main.version=$VERSION"
 ENV BINDIR rootfs/bin
 
 WORKDIR /app
-RUN go build -o $BINDIR/boot -a -installsuffix cgo -ldflags "$LDFLAGS"  boot.go
+ADD dockerbuilder dockerbuilder
+CMD /app/dockerbuilder
