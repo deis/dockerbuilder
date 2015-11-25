@@ -1,4 +1,4 @@
-FROM alpine:3.1
+FROM alpine:3.2
 
 ENV VERSION 0.0.1
 ENV GO15VENDOREXPERIMENT 1
@@ -9,5 +9,6 @@ ENV BINDIR rootfs/bin
 RUN apk add --update curl bash && rm -rf /var/cache/apk/* && curl -L https://get.docker.com/builds/Linux/x86_64/docker-latest > /usr/bin/docker && chmod +x /usr/bin/docker
 
 WORKDIR /app
+ADD rootfs/bin/mc mc
 ADD dockerbuilder dockerbuilder
 CMD /app/dockerbuilder
