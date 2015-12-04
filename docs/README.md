@@ -1,10 +1,10 @@
-# Project Docs
+# dockerbuilder
 
-Documentation for the project should be stored in the `_docs` directory.
-Since the directory is protected from Go, undecorated code samples can
-also be dropped inside of this directory.
+`dockerbuilder` is a simple tool for downloading slugs and executing Docker builds. It's most commonly launched as a pod from [builder](https://github.com/deis/builder) to build a Dockerfile codebase, but it's generic and can be configured for use anywhere.
 
-We need to decide on whether we'll continue using RST or switch to
-Markdown.
+It has a single command, `run`, which does the following (you can get a similar description by running `help`):
 
-I believe we are leaning toward MkDocs: http://www.mkdocs.org/
+1. Calls `mc cp` to download `$TAR_URL` to a temporary directory (`/tmp` hereafter). Assumes `$TAR_URL` points to a gzipped tarball (`.tar.gz`)
+2. Runs `tar xvzf` inside `/tmp` to unzip the downloaded tarball
+3. Runs `docker build -t $IMG_URL .` in `/tmp` to build the Docker image
+4. Runs `docker push $IMG_URL`

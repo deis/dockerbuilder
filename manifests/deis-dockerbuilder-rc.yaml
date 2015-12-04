@@ -1,0 +1,24 @@
+# note deis builder (https://github.com/deis/builder) runs one deis-dockerbuilder pod per build,
+# so it doesn't use this manifest
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  # Change the name
+  name: deis-dockerbuilder-rc
+  labels:
+    heritage: deis
+spec:
+  replicas: 1
+
+  # Change the selector name
+  selector:
+    app: deis-dockerbuilder
+  template:
+    metadata:
+      labels:
+        # Important: these labels need to match the selector above
+        app: deis-dockerbuilder
+    spec:
+      containers:
+        - name: deis-dockerbuilder
+        image: arschles/dockerbuilder:0.0.1-20151124102330

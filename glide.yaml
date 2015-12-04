@@ -1,0 +1,4 @@
+package: main
+import:
+- package: github.com/codegangsta/cli
+  version: 0302d3914d2a6ad61404584cdae6e6dbc9c03599

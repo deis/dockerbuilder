@@ -1,0 +1,4 @@
+vendor/
+dockerbuilder
+rootfs/bin/boot
+boot
