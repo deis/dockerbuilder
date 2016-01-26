@@ -2,7 +2,7 @@
 # Some uses for short name:
 # - Docker image name
 # - Kubernetes service, rc, pod, secret, volume names
-SHORT_NAME := example
+SHORT_NAME := dockerbuilder
 
 # Enable vendor/ directory support.
 export GO15VENDOREXPERIMENT=1
@@ -20,7 +20,7 @@ BINDIR := ./rootfs
 # Legacy support for DEV_REGISTRY, plus new support for DEIS_REGISTRY.
 DEV_REGISTRY ?= $(eval docker-machine ip deis):5000
 DEIS_REGISTY ?= ${DEV_REGISTRY}
-
+IMAGE_PREFIX ?= deis
 # Kubernetes-specific information for RC, Service, and Image.
 RC := manifests/deis-${SHORT_NAME}-rc.yaml
 SVC := manifests/deis-${SHORT_NAME}-service.yaml
@@ -32,9 +32,8 @@ all:
 # This illustrates a two-stage Docker build. docker-compile runs inside of
 # the Docker environment. Other alternatives are cross-compiling, doing
 # the build as a `docker build`.
-build:
-	mkdir -p ${BINDIR}/bin
-	docker run --rm -v ${PWD}:/app -w /app golang:1.5.1 make docker-compile
+docker-build:
+	docker build --rm -t ${IMAGE} rootfs
 
 # For cases where build is run inside of a container.
 docker-compile:
