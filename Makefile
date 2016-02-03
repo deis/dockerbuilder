@@ -19,12 +19,12 @@ BINDIR := ./rootfs
 
 # Legacy support for DEV_REGISTRY, plus new support for DEIS_REGISTRY.
 DEV_REGISTRY ?= $(eval docker-machine ip deis):5000
-DEIS_REGISTY ?= ${DEV_REGISTRY}
+DEIS_REGISTY ?= ${DEV_REGISTRY}/
 IMAGE_PREFIX ?= deis
 # Kubernetes-specific information for RC, Service, and Image.
 RC := manifests/deis-${SHORT_NAME}-rc.yaml
 SVC := manifests/deis-${SHORT_NAME}-service.yaml
-IMAGE := ${DEIS_REGISTRY}/deis/${SHORT_NAME}:${VERSION}
+IMAGE := ${DEIS_REGISTRY}${IMAGE_PREFIX}/${SHORT_NAME}:${VERSION}
 
 all:
 	@echo "Use a Makefile to control top-level building of the project."
@@ -63,5 +63,11 @@ kube-rc:
 
 kube-clean:
 	kubectl delete rc deis-example
+
+bootstrap:
+	@echo Nothing to do.
+
+test:
+	@echo "Implement functional tests in _tests directory"
 
 .PHONY: all build docker-compile kube-up kube-down deploy
