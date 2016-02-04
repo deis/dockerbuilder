@@ -43,7 +43,7 @@ docker-compile:
 # We also alter the RC file to set the image name.
 docker-build:
 	docker build --rm -t ${IMAGE} rootfs
-	perl -pi -e "s|[a-z0-9.:]+\/deis\/${SHORT_NAME}:[0-9a-z-.]+|${IMAGE}|g" ${RC}
+
 
 # Push to a registry that Kubernetes can access.
 docker-push:
