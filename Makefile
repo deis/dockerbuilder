@@ -29,21 +29,13 @@ IMAGE := ${DEIS_REGISTRY}${IMAGE_PREFIX}/${SHORT_NAME}:${VERSION}
 all:
 	@echo "Use a Makefile to control top-level building of the project."
 
-# This illustrates a two-stage Docker build. docker-compile runs inside of
-# the Docker environment. Other alternatives are cross-compiling, doing
-# the build as a `docker build`.
-docker-build:
-	docker build --rm -t ${IMAGE} rootfs
-
 # For cases where build is run inside of a container.
 docker-compile:
 	go build -o ${BINDIR}/bin/boot -a -installsuffix cgo -ldflags ${LDFLAGS} boot.go
 
 # For cases where we're building from local
-# We also alter the RC file to set the image name.
 docker-build:
 	docker build --rm -t ${IMAGE} rootfs
-
 
 # Push to a registry that Kubernetes can access.
 docker-push:
