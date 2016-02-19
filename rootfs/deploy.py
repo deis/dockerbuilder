@@ -12,7 +12,9 @@ from urllib.parse import urlparse
 def log_output(stream, decode):
     for chunk in stream:
         if decode:
-            print(chunk.get('stream').replace('\n',''))
+            stream_chunk = chunk.get('stream')
+            if stream_chunk:
+                print(stream_chunk.replace('\n', ''))
         else:
             print(chunk.decode('utf-8'))
 
