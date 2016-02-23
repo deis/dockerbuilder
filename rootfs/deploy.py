@@ -31,7 +31,8 @@ if tar_url:
         s3 = boto3.client('s3', config=Config(signature_version='s3v4'),
                           endpoint_url=hosturl,
                           aws_access_key_id=secretId,
-                          aws_secret_access_key=secretKey)
+                          aws_secret_access_key=secretKey,
+                          region_name=os.environ.get('REGION', 'us-east-1'))
         bucket = url.path.split('/')[1]
         key = ('/').join(url.path.split('/')[2:])
         s3.download_file(bucket, key, 'apptar')
