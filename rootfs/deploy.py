@@ -4,6 +4,8 @@ import tarfile
 import os.path
 import boto3
 import requests
+import boto
+import boto.s3.connection
 
 from botocore.client import Config
 from urllib.parse import urlparse
@@ -28,14 +30,25 @@ if tar_url:
             secretKey = the_file.read().strip()
         url = urlparse(tar_url)
         hosturl = url.scheme + "://" + url.netloc
-        s3 = boto3.client('s3', config=Config(signature_version='s3v4'),
+        bucket = url.path.split('/')[1]
+        key = ('/').join(url.path.split('/')[2:])
+        if url.netloc == "storage.googleapis.com":
+            conn = boto.connect_s3(
+                        aws_access_key_id=secretId,
+                        aws_secret_access_key=secretKey,
+                        host = url.netloc,
+                        calling_format = boto.s3.connection.OrdinaryCallingFormat(),
+                        )
+            bucket = conn.get_bucket(bucket)
+            tarkey = bucket.get_key(key)
+            tarkey.get_contents_to_filename('apptar')
+        else:
+            s3 = boto3.client('s3', config=Config(signature_version='s3v4'),
                           endpoint_url=hosturl,
                           aws_access_key_id=secretId,
                           aws_secret_access_key=secretKey,
                           region_name=os.environ.get('REGION', 'us-east-1'))
-        bucket = url.path.split('/')[1]
-        key = ('/').join(url.path.split('/')[2:])
-        s3.download_file(bucket, key, 'apptar')
+            s3.download_file(bucket, key, 'apptar')
     else:
         r = requests.get(tar_url)
         with open("apptar", "wb") as app:
