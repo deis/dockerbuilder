@@ -7,10 +7,6 @@ SHORT_NAME := dockerbuilder
 # Enable vendor/ directory support.
 export GO15VENDOREXPERIMENT=1
 
-# SemVer with build information is defined in the SemVer 2 spec, but Docker
-# doesn't allow +, so we use -.
-VERSION ?= 0.0.1-$(shell date "+%Y%m%d%H%M%S")
-
 # Common flags passed into Go's linker.
 LDFLAGS := "-s -X main.version=${VERSION}"
 
@@ -21,10 +17,8 @@ BINDIR := ./rootfs
 DEV_REGISTRY ?= $(eval docker-machine ip deis):5000
 DEIS_REGISTY ?= ${DEV_REGISTRY}/
 IMAGE_PREFIX ?= deis
-# Kubernetes-specific information for RC, Service, and Image.
-RC := manifests/deis-${SHORT_NAME}-rc.yaml
-SVC := manifests/deis-${SHORT_NAME}-service.yaml
-IMAGE := ${DEIS_REGISTRY}${IMAGE_PREFIX}/${SHORT_NAME}:${VERSION}
+
+include versioning.mk
 
 all:
 	@echo "Use a Makefile to control top-level building of the project."
@@ -36,10 +30,7 @@ docker-compile:
 # For cases where we're building from local
 docker-build:
 	docker build --rm -t ${IMAGE} rootfs
-
-# Push to a registry that Kubernetes can access.
-docker-push:
-	docker push ${IMAGE}
+	docker tag -f ${IMAGE} ${MUTABLE_IMAGE}
 
 # Deploy is a Kubernetes-oriented target
 deploy: kube-service kube-rc
