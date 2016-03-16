@@ -1,61 +1,25 @@
-# Prototype Component Repo
+# Deis Dockerbuilder v2
 
-This repo is a prototype for what a Deis component's Git repository
-should look like.
+[![Build Status](https://travis-ci.org/deis/dockerbuilder.svg?branch=master)](https://travis-ci.org/deis/dockerbuilder)
+[![Docker Repository on Quay](https://quay.io/repository/deisci/dockerbuilder/status "Docker Repository on Quay")](https://quay.io/repository/deisci/dockerbuilder)
 
-A Deis component is...
+Deis (pronounced DAY-iss) Workflow is an open source Platform as a Service (PaaS) that adds a developer-friendly layer to any [Kubernetes](http://kubernetes.io) cluster, making it easy to deploy and manage applications on your own servers.
 
-- An isolated piece of functionality (e.g. a microservice)
-- That can be packaged into a container (via `docker build`)
-- And can be run inside of Kubernetes
+For more information about the Deis Workflow, please visit the main project page at https://github.com/deis/workflow.
 
-Typically, Deis components are written in Go.
+## Beta Status
 
-## Practical Usage
+This Deis component is currently in beta status, and we welcome your input! If you have feedback, please [submit an issue][issues]. If you'd like to participate in development, please read the "Development" section below and [submit a pull request][prs].
 
-If you want to experiment with creating a new repo using this framework,
-try something like this:
+[issues]: https://github.com/deis/workflow/issues
+[prs]: https://github.com/deis/workflow/pulls
 
-```
-$ mkdir my_project
-$ cd my_project
-$ curl -fsSL https://github.com/technosophos/prototype-repo/archive/master.tar.gz | tar -zxv --strip-components 1
-```
+# About
 
-## First-Class Kubernetes
+The dockerbuilder is the central API for the entire Deis Platform. Below is a non-exhaustive list of things it can do:
 
-Every component must define the appropriate Kubernetes files.
-Preferably, components should use *Replication Controllers* over pods,
-and use *Services* for autodiscovery.
-
-*Labels* should be used for versioning components and also for
-identifying components as part of Deis.
-
-*Secrets* should be used for storing small bits of shared information,
-and their contents may be set at startup time.
-
-All Kubernetes definitions should be placed in the `manifests/` directory.
-
-The _Makefile_ should have targets that use `kubectl` to load
-definitions into Kubernetes.
-
-## Dockerfiles are for Running
-
-Source code should be built either outside of Docker or in a special
-Docker build phase.
-
-A separate Dockerfile should be used for building the image. That
-Dockerfile should always be placed inside of the `rootfs` directory, and
-should manage the final image size appropriately.
-
-(See the Makefile for one possible way of doing a Docker build phase)
-
-## RootFS
-
-All files that are to be packaged into the container should be written
-to the `rootfs/` folder.
-
-## Extended Testing
-
-Along with unit tests, Deis values functional and integration testing.
-These tests should go in the `_tests` folder.
+* Create a new application
+* Delete an application
+* Scale an application
+* Configure an application
+* Create a new user
