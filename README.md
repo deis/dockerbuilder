@@ -1,61 +1,42 @@
-# Prototype Component Repo
+# Deis Dockerbuilder v2
 
-This repo is a prototype for what a Deis component's Git repository
-should look like.
+[![Build Status](https://travis-ci.org/deis/dockerbuilder.svg?branch=master)](https://travis-ci.org/deis/dockerbuilder)
+[![Docker Repository on Quay](https://quay.io/repository/deisci/dockerbuilder/status "Docker Repository on Quay")](https://quay.io/repository/deisci/dockerbuilder)
 
-A Deis component is...
+Deis (pronounced DAY-iss) Workflow is an open source Platform as a Service (PaaS) that adds a developer-friendly layer to any [Kubernetes](http://kubernetes.io) cluster, making it easy to deploy and manage applications on your own servers.
 
-- An isolated piece of functionality (e.g. a microservice)
-- That can be packaged into a container (via `docker build`)
-- And can be run inside of Kubernetes
+For more information about the Deis Workflow, please visit the main project page at https://github.com/deis/workflow.
 
-Typically, Deis components are written in Go.
+## Beta Status
 
-## Practical Usage
+This Deis component is currently in beta status, and we welcome your input! If you have feedback, please [submit an issue][issues]. If you'd like to participate in development, please read the "Development" section below and [submit a pull request][prs].
 
-If you want to experiment with creating a new repo using this framework,
-try something like this:
+[issues]: https://github.com/deis/workflow/issues
+[prs]: https://github.com/deis/workflow/pulls
 
-```
-$ mkdir my_project
-$ cd my_project
-$ curl -fsSL https://github.com/technosophos/prototype-repo/archive/master.tar.gz | tar -zxv --strip-components 1
-```
+# About
 
-## First-Class Kubernetes
+The Dockerbuilder downloads a git archive ([gzip](http://www.gzip.org/)ped [tar](https://www.gnu.org/software/tar/)ball) from a specified [S3 API compatible server][s3-api] and runs `docker build` on it. When the build is done, it runs `docker push` to push the resulting image to a specified [Docker](https://www.docker.com/) repository.
+  
+This component is usually launched by the [Deis Builder](https://github.com/deis/builder) and used inside the Deis [PaaS](https://en.wikipedia.org/wiki/Platform_as_a_service), but it is flexible enough to be used as a pod inside any Kubernetes cluster.
 
-Every component must define the appropriate Kubernetes files.
-Preferably, components should use *Replication Controllers* over pods,
-and use *Services* for autodiscovery.
+# Development
 
-*Labels* should be used for versioning components and also for
-identifying components as part of Deis.
+The Deis project welcomes contributions from all developers. The high level process for development matches many other open source projects. See below for an outline.
 
-*Secrets* should be used for storing small bits of shared information,
-and their contents may be set at startup time.
+* Fork this repository
+* Make your changes
+* [Submit a pull request][prs] (PR) to this repository with your changes, and unit tests whenever possible.
+  * If your PR fixes any [issues][issues], make sure you write Fixes #1234 in your PR description (where #1234 is the number of the issue you're closing)
+* The Deis core contributors will review your code. After each of them sign off on your code, they'll label your PR with LGTM1 and LGTM2 (respectively). Once that happens, the contributors will merge it
 
-All Kubernetes definitions should be placed in the `manifests/` directory.
+## License
 
-The _Makefile_ should have targets that use `kubectl` to load
-definitions into Kubernetes.
+Copyright 2013, 2014, 2015, 2016 Engine Yard, Inc.
 
-## Dockerfiles are for Running
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at <http://www.apache.org/licenses/LICENSE-2.0>
 
-Source code should be built either outside of Docker or in a special
-Docker build phase.
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-A separate Dockerfile should be used for building the image. That
-Dockerfile should always be placed inside of the `rootfs` directory, and
-should manage the final image size appropriately.
-
-(See the Makefile for one possible way of doing a Docker build phase)
-
-## RootFS
-
-All files that are to be packaged into the container should be written
-to the `rootfs/` folder.
-
-## Extended Testing
-
-Along with unit tests, Deis values functional and integration testing.
-These tests should go in the `_tests` folder.
+[issues]: https://github.com/deis/workflow/issues
+[prs]: https://github.com/deis/workflow/pulls
