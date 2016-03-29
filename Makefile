@@ -23,10 +23,6 @@ include versioning.mk
 all:
 	@echo "Use a Makefile to control top-level building of the project."
 
-# For cases where build is run inside of a container.
-docker-compile:
-	go build -o ${BINDIR}/bin/boot -a -installsuffix cgo -ldflags ${LDFLAGS} boot.go
-
 # For cases where we're building from local
 docker-build:
 	docker build --rm -t ${IMAGE} rootfs
