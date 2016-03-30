@@ -8,7 +8,7 @@ services:
   - docker
 sudo: required
 script:
-  - make bootstrap test
+  - make bootstrap test docker-build
 deploy:
   provider: script
   script: _scripts/deploy.sh
