@@ -13,6 +13,10 @@ from oauth2client.service_account import ServiceAccountCredentials
 from gcloud.storage.client import Client
 from azure.storage.blob import BlockBlobService
 
+
+DEBUG = os.environ.get('DEBUG') in ('true', '1')
+
+
 def log_output(stream, decode):
     for chunk in stream:
         if decode:
@@ -102,4 +106,5 @@ stream = client.build(tag=repo, stream=True, decode=True, rm=True, path='/app')
 log_output(stream, True)
 print("pushing to registry")
 stream = client.push(registry+'/'+imageName, tag=imageTag, stream=True, insecure_registry=True)
-log_output(stream, False)
+if DEBUG:
+    log_output(stream, False)
