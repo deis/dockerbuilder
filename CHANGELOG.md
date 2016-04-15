@@ -1,3 +1,14 @@
+### v2.0.0-beta1 -> v2.0.0-beta2
+
+#### Features
+
+ - [`36ea3fa`](https://github.com/deis/dockerbuilder/commit/36ea3fa8aa3f1eec31677304b2ef5caa800dcc8d) _scripts: add CHANGELOG.md and generator script
+ - [`1d54179`](https://github.com/deis/dockerbuilder/commit/1d541794e8022acbac81dd37c94e10fbba412876) storage: Add support for all storage backends
+
+#### Maintenance
+
+ - [`2be1cac`](https://github.com/deis/dockerbuilder/commit/2be1cacfb7a0e5d4b87d55e8d9ce8966d4d4d81c) .travis.yml: run docker builds on PRs
+
 ### v2.0.0-beta1
 
 #### Features
