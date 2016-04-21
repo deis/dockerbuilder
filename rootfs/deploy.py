@@ -104,7 +104,13 @@ imageName, imageTag = os.getenv('IMG_NAME').split(":", 1)
 repo = registry + "/" + os.getenv('IMG_NAME')
 stream = client.build(tag=repo, stream=True, decode=True, rm=True, path='/app')
 log_output(stream, True)
+
 print("pushing to registry")
 stream = client.push(registry+'/'+imageName, tag=imageTag, stream=True, insecure_registry=True)
+if DEBUG:
+    log_output(stream, False)
+
+print("deleting image")
+stream = client.remove_image(image=registry+'/'+imageName, force=True, noprune=False)
 if DEBUG:
     log_output(stream, False)
