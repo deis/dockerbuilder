@@ -111,6 +111,6 @@ if DEBUG:
     log_output(stream, False)
 
 print("deleting image")
-stream = client.remove_image(image=registry+'/'+imageName, force=True, noprune=False)
-if DEBUG:
+stream = client.remove_image(image=registry+'/'+imageName+':'+imageTag, force=True, noprune=False)
+if DEBUG and stream is not None:
     log_output(stream, False)
