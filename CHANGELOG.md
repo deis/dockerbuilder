@@ -1,3 +1,21 @@
+### v2.0.0-beta2 -> v2.0.0-beta3
+
+#### Features
+
+ - [`3df7fda`](https://github.com/deis/dockerbuilder/commit/3df7fda820ea2b2d0a3d567565de7d2095f1025e) rootfs/deploy.py: remove image after it's pushed"
+ - [`65ce61a`](https://github.com/deis/dockerbuilder/commit/65ce61a9a14a65457c504f7b51c8e67dc58bff80) rootfs/deploy.py: remove image after it's pushed
+
+#### Fixes
+
+ - [`7189386`](https://github.com/deis/dockerbuilder/commit/718938627f7436bd345a980b38536692ba74d3ff) dockerbuilder: pass the tag of the image to be deleted
+ - [`1c818fb`](https://github.com/deis/dockerbuilder/commit/1c818fb159254d4a73fe92eaf08edf550543a8f1) file-name: changed the file name to deis-dockerbuilder-pod.yaml
+ - [`6066296`](https://github.com/deis/dockerbuilder/commit/60662962262e9088ce6bf6697c9e89493076b8d1) deploy.py: hide Docker output stream unless DEBUG is on
+
+#### Maintenance
+
+ - [`8e3a1c0`](https://github.com/deis/dockerbuilder/commit/8e3a1c092d3c9c5e553e1c58fe15793dbca8536f) .travis.yml: Deep six the travis -> jenkins webhooks
+ - [`8715439`](https://github.com/deis/dockerbuilder/commit/8715439f86aef82856f2ce30100f89593dc37d9b) Dockerfile: update pip to 8.1.1
+
 ### v2.0.0-beta1 -> v2.0.0-beta2
 
 #### Features
