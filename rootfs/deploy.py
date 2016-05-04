@@ -1,11 +1,9 @@
 import docker
 import os
-import sys
 import tarfile
 import requests
 
 import boto3
-import botocore
 import json
 from botocore.utils import fix_s3_host
 from botocore.client import Config
@@ -18,13 +16,25 @@ DEBUG = os.environ.get('DEBUG') in ('true', '1')
 
 
 def log_output(stream, decode):
+    error = False
     for chunk in stream:
-        if decode:
+        if 'error' in chunk:
+            error = True
+            print(chunk.decode('utf-8'))
+        elif decode:
             stream_chunk = chunk.get('stream')
             if stream_chunk:
                 print(stream_chunk.replace('\n', ''))
-        else:
+        elif DEBUG:
             print(chunk.decode('utf-8'))
+    if error:
+        exit(1)
+
+
+def log(msg):
+    if DEBUG:
+        print(msg)
+
 
 def download_file(tar_path):
     if os.getenv('BUILDER_STORAGE') == "s3":
@@ -94,17 +104,16 @@ if tar_path:
         with open("apptar", "wb") as app:
             app.write(r.content)
 
-print("download tar file complete")
+log("download tar file complete")
 with tarfile.open("apptar", "r:gz") as tar:
     tar.extractall("/app/")
-print("extracting tar file complete")
+log("extracting tar file complete")
 client = docker.Client(version='auto')
 registry = os.getenv("DEIS_REGISTRY_SERVICE_HOST") + ":" + os.getenv("DEIS_REGISTRY_SERVICE_PORT")
 imageName, imageTag = os.getenv('IMG_NAME').split(":", 1)
 repo = registry + "/" + os.getenv('IMG_NAME')
 stream = client.build(tag=repo, stream=True, decode=True, rm=True, path='/app')
 log_output(stream, True)
-print("pushing to registry")
+print("Pushing to registry")
 stream = client.push(registry+'/'+imageName, tag=imageTag, stream=True, insecure_registry=True)
-if DEBUG:
-    log_output(stream, False)
+log_output(stream, False)
