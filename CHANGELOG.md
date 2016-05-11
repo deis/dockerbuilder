@@ -1,3 +1,14 @@
+### v2.0.0-beta3 -> v2.0.0-beta4
+
+#### Fixes
+
+ - [`7a29e44`](https://github.com/deis/dockerbuilder/commit/7a29e44d44e12ae6543f0c69eac6121721ac8b01) docker-push: the docker push errors
+
+#### Documentation
+
+ - [`63ba6de`](https://github.com/deis/dockerbuilder/commit/63ba6de33d1cdde4f9d33b6af394b6480887053d) badge: added code-beat badge
+ - [`b52ce7d`](https://github.com/deis/dockerbuilder/commit/b52ce7ddfb07811984a1db1ab558cfa62261c9b8) CHANGELOG.md: update for v2.0.0-beta3
+
 ### v2.0.0-beta2 -> v2.0.0-beta3
 
 #### Features
