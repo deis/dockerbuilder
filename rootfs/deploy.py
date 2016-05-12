@@ -12,7 +12,7 @@ from gcloud.storage.client import Client
 from azure.storage.blob import BlockBlobService
 
 
-DEBUG = os.environ.get('DEBUG') in ('true', '1')
+DEBUG = os.environ.get('DEIS_DEBUG') in ('true', '1')
 
 
 def log_output(stream, decode):

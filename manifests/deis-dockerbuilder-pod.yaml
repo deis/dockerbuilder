@@ -12,7 +12,7 @@ spec:
       imagePullPolicy: Always
       image: quay.io/deisci/dockerbuilder:v2-beta
       env:
-        - name: DEBUG
+        - name: DEIS_DEBUG
           value: "1"
         - name: TAR_URL
           value: tar-url
