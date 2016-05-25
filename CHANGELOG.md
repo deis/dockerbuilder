@@ -1,3 +1,14 @@
+### v2.0.0-beta4 -> v2.0.0-rc1
+
+#### Fixes
+
+ - [`8ba3caf`](https://github.com/deis/dockerbuilder/commit/8ba3cafdbf0411c1d0543aae7fad364207e72bee) encode: decode chunk to unicode
+ - [`cf12c6b`](https://github.com/deis/dockerbuilder/commit/cf12c6b122c1beee477be6f3391de0bdf86599c1) deploy.py: rename DEBUG to DEIS_DEBUG
+
+#### Maintenance
+
+ - [`5a62965`](https://github.com/deis/dockerbuilder/commit/5a62965f345ab668a1098dfe1d24ad0176143ed6) Dockerfile: Refactor image to use ubuntu-slim
+
 ### v2.0.0-beta3 -> v2.0.0-beta4
 
 #### Fixes
