@@ -40,17 +40,17 @@ def log(msg):
 def download_file(tar_path):
     if os.getenv('BUILDER_STORAGE') == "s3":
         with open('/var/run/secrets/deis/objectstore/creds/accesskey', 'r') as access_file:
-            AWS_ACCESS_KEY_ID = access_file.read()
+            os.putenv('AWS_ACCESS_KEY_ID', access_file.read())
         with open('/var/run/secrets/deis/objectstore/creds/secretkey', 'r') as secret_file:
-            AWS_SECRET_ACCESS_KEY = secret_file.read()
+            os.putenv('AWS_SECRET_ACCESS_KEY', secret_file.read())
         with open('/var/run/secrets/deis/objectstore/creds/region', 'r') as region_file:
-            AWS_DEFAULT_REGION = region_file.read()
+            os.putenv('AWS_DEFAULT_REGION', region_file.read())
 
         bucket_name = ""
         with open('/var/run/secrets/deis/objectstore/creds/builder-bucket', 'r') as bucket_file:
             bucket_name = bucket_file.read()
 
-        conn = boto3.resource('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY, region_name=AWS_DEFAULT_REGION)
+        conn = boto3.resource('s3')
         conn.Bucket(bucket_name).Object(tar_path).download_file('apptar')
 
     elif os.getenv('BUILDER_STORAGE') == "gcs":
