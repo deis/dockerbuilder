@@ -1,3 +1,14 @@
+### v2.0.0-rc2 -> v2.0.0
+
+#### Documentation
+
+- [`f37322b`](https://github.com/deis/dockerbuilder/commit/f37322b0bffd7c10fa3e66ebdc33e874e633b265) CHANGELOG.md: add entry for v2.0.0-rc2
+
+#### Maintenance
+
+- [`91e869b`](https://github.com/deis/dockerbuilder/commit/91e869bedcb382d0c7514f279e7c850e673c00a4) various: remove beta status
+- [`bf0cac4`](https://github.com/deis/dockerbuilder/commit/bf0cac43af800d8f66677084ff1a2589cf644485) various: remove beta status
+
 ### v2.0.0-rc1 -> v2.0.0-rc2
 
 ### v2.0.0-beta4 -> v2.0.0-rc1
