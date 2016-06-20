@@ -13,7 +13,7 @@ RUN apt-get update \
 		python-dev \
 		--no-install-recommends \
 	&& curl -sSL https://bootstrap.pypa.io/get-pip.py | python - pip==8.1.1 \
-	&& pip install --disable-pip-version-check --no-cache-dir boto3==1.2.6 gcloud==0.11.0 azure-storage==0.30.0 docker-py==1.7.2 \
+	&& pip install --disable-pip-version-check --no-cache-dir docker-py==1.7.2 \
 	&& apt-get remove -y --auto-remove --purge \
 		gcc \
 		libffi-dev \
@@ -22,6 +22,9 @@ RUN apt-get update \
 		python-dev \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/man /usr/share/doc
+
+ADD https://storage.googleapis.com/object-storage-cli/bb8e054/objstorage-bb8e054-linux-amd64 /bin/objstorage
+RUN chmod +x /bin/objstorage
 
 COPY . /
 
