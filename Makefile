@@ -26,7 +26,7 @@ all:
 # For cases where we're building from local
 docker-build:
 	docker build --rm -t ${IMAGE} rootfs
-	docker tag -f ${IMAGE} ${MUTABLE_IMAGE}
+	docker tag ${IMAGE} ${MUTABLE_IMAGE}
 
 # Deploy is a Kubernetes-oriented target
 deploy: kube-service kube-rc
