@@ -29,5 +29,3 @@ RUN chmod +x /bin/objstorage
 COPY . /
 
 CMD ["python", "/deploy.py"]
-
-ENV WORKFLOW_RELEASE 2.0.0
