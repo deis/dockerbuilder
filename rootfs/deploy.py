@@ -31,6 +31,7 @@ def log(msg):
 
 
 def download_file(tar_path):
+    os.putenv('BUCKET_FILE', "/var/run/secrets/deis/objectstore/creds/builder-bucket")
     if os.getenv('BUILDER_STORAGE') == "minio":
         os.makedirs("/tmp/objectstore/minio")
         bucketFile = open('/tmp/objectstore/minio/builder-bucket', 'w')
