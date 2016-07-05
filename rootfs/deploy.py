@@ -13,7 +13,10 @@ def log_output(stream, decode):
     for chunk in stream:
         if 'error' in chunk:
             error = True
-            print(chunk.decode('utf-8'))
+            if isinstance(chunk, basestring):  # Change "basestring" to "str" for Python3
+                print(chunk.decode('utf-8'))
+            else:
+                print(chunk['error'].decode('utf-8'))
         elif decode:
             stream_chunk = chunk.get('stream')
             if stream_chunk:
