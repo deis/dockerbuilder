@@ -13,7 +13,7 @@ RUN apt-get update \
 		python-dev \
 		--no-install-recommends \
 	&& curl -sSL https://bootstrap.pypa.io/get-pip.py | python - pip==8.1.1 \
-	&& pip install --disable-pip-version-check --no-cache-dir docker-py==1.7.2 \
+	&& pip install --disable-pip-version-check --no-cache-dir docker-py==1.8.1 \
 	&& apt-get remove -y --auto-remove --purge \
 		gcc \
 		libffi-dev \
