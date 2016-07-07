@@ -1,6 +1,7 @@
 import docker
 import os
 import tarfile
+import time
 import requests
 import subprocess
 
@@ -25,6 +26,8 @@ def log_output(stream, decode):
         elif DEBUG:
             print(chunk.decode('utf-8'))
     if error:
+        # HACK: delay so stderr is logged before this dockerbuilder pod exits.
+        time.sleep(3)
         exit(1)
 
 
