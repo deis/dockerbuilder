@@ -63,7 +63,7 @@ with tarfile.open("apptar", "r:gz") as tar:
     tar.extractall("/app/")
 log("extracting tar file complete")
 client = docker.Client(version='auto')
-registry = "localhost:" + os.getenv("DEIS_REGISTRY_PROXY_PORT")
+registry = os.getenv("DEIS_REGISTRY_SERVICE_HOST") + ":" + os.getenv("DEIS_REGISTRY_SERVICE_PORT")
 imageName, imageTag = os.getenv('IMG_NAME').split(":", 1)
 repo = registry + "/" + os.getenv('IMG_NAME')
 stream = client.build(tag=repo, stream=True, decode=True, rm=True, path='/app')
