@@ -5,8 +5,8 @@ import time
 import requests
 import subprocess
 
-
 DEBUG = os.environ.get('DEIS_DEBUG') in ('true', '1')
+regsitryLocation = os.getenv('DEIS_REGISTRY_LOCATION', 'on-cluster')
 
 
 def log_output(stream, decode):
@@ -36,6 +36,40 @@ def log(msg):
         print(msg)
 
 
+def get_registry_name():
+    hostname = os.getenv('DEIS_REGISTRY_HOSTNAME', "").replace("https://", "").replace("http://", "")
+    if regsitryLocation == "off-cluster":
+        organization = os.getenv('DEIS_REGISTRY_ORGANIZATION')
+        regName = ""
+        # empty hostname means dockerhub and hence no need to prefix the image
+        if hostname != "":
+            regName = hostname + "/"
+        # Registries may have organizations/namespaces under them which needs to
+        # be prefixed to the image
+        if organization != "":
+            regName = regName + organization
+        return regName
+    elif regsitryLocation == "ecr":
+        return hostname
+    elif regsitryLocation == "gcr":
+        return hostname+"/"+os.getenv('DEIS_REGISTRY_GCS_PROJ_ID')
+    else:
+        return os.getenv("DEIS_REGISTRY_SERVICE_HOST") + ":" + os.getenv("DEIS_REGISTRY_SERVICE_PORT")
+
+
+def docker_push(client, repo, tag):
+    if regsitryLocation != "on-cluster":
+        hostname = os.getenv('DEIS_REGISTRY_HOSTNAME', 'https://index.docker.io/v1/')
+        auth_config = {
+            'username': os.getenv('DEIS_REGISTRY_USERNAME'),
+            'password': os.getenv('DEIS_REGISTRY_PASSWORD'),
+            'serveraddress': hostname,
+        }
+        return client.push(repo, tag=tag, stream=True, auth_config=auth_config)
+    else:
+        return client.push(repo, tag=tag, stream=True)
+
+
 def download_file(tar_path):
     os.putenv('BUCKET_FILE', "/var/run/secrets/deis/objectstore/creds/builder-bucket")
     if os.getenv('BUILDER_STORAGE') == "minio":
@@ -63,11 +97,11 @@ with tarfile.open("apptar", "r:gz") as tar:
     tar.extractall("/app/")
 log("extracting tar file complete")
 client = docker.Client(version='auto')
-registry = os.getenv("DEIS_REGISTRY_SERVICE_HOST") + ":" + os.getenv("DEIS_REGISTRY_SERVICE_PORT")
+registry = get_registry_name()
 imageName, imageTag = os.getenv('IMG_NAME').split(":", 1)
 repo = registry + "/" + os.getenv('IMG_NAME')
 stream = client.build(tag=repo, stream=True, decode=True, rm=True, path='/app')
 log_output(stream, True)
 print("Pushing to registry")
-stream = client.push(registry+'/'+imageName, tag=imageTag, stream=True)
+stream = docker_push(client, registry+'/'+imageName, imageTag)
 log_output(stream, False)
