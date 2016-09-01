@@ -7,5 +7,9 @@ branches:
 services:
   - docker
 sudo: required
+install:
+  - pip install -r rootfs/dev_requirements.txt
 script:
+  - make test
+after_success:
   - make docker-build
