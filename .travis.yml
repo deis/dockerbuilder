@@ -1,11 +1,13 @@
-language: go
-go:
-  - 1.5.1
+language: python
+python:
+  - "2.7"
 branches:
   only:
     - master
 services:
   - docker
 sudo: required
+install:
+  - pip install -r rootfs/dev_requirements.txt
 script:
-  - make docker-build
+  - make test docker-build

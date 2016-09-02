@@ -37,7 +37,8 @@ def log(msg):
 
 
 def get_registry_name():
-    hostname = os.getenv('DEIS_REGISTRY_HOSTNAME', "").replace("https://", "").replace("http://", "")
+    hostname = os.getenv('DEIS_REGISTRY_HOSTNAME', "")
+    hostname = hostname.replace("https://", "").replace("http://", "")
     if regsitryLocation == "off-cluster":
         organization = os.getenv('DEIS_REGISTRY_ORGANIZATION')
         regName = ""
@@ -52,9 +53,9 @@ def get_registry_name():
     elif regsitryLocation == "ecr":
         return hostname
     elif regsitryLocation == "gcr":
-        return hostname+"/"+os.getenv('DEIS_REGISTRY_GCS_PROJ_ID')
+        return hostname + "/" + os.getenv('DEIS_REGISTRY_GCS_PROJ_ID')
     else:
-        return os.getenv("DEIS_REGISTRY_SERVICE_HOST") + ":" + os.getenv("DEIS_REGISTRY_SERVICE_PORT")
+        return os.getenv("DEIS_REGISTRY_SERVICE_HOST") + ":" + os.getenv("DEIS_REGISTRY_SERVICE_PORT")  # noqa: E501
 
 
 def docker_push(client, repo, tag):
@@ -80,7 +81,13 @@ def download_file(tar_path):
         os.putenv('BUCKET_FILE', "/tmp/objectstore/minio/builder-bucket")
     elif os.getenv('BUILDER_STORAGE') in ["azure", "swift"]:
         os.putenv('CONTAINER_FILE', "/var/run/secrets/deis/objectstore/creds/builder-container")
-    command = ["objstorage", "--storage-type="+os.getenv('BUILDER_STORAGE'), "download", tar_path, "apptar"]
+    command = [
+        "objstorage",
+        "--storage-type="+os.getenv('BUILDER_STORAGE'),
+        "download",
+        tar_path,
+        "apptar"
+    ]
     subprocess.check_call(command)
 
 tar_path = os.getenv('TAR_PATH')
