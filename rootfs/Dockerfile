@@ -1,12 +1,11 @@
 FROM quay.io/deis/base:v0.3.4
 
-RUN buildDeps='gcc git libffi-dev libssl-dev musl-dev python-dev python-pip python-wheel python-setuptools'; \
+RUN buildDeps='gcc git libffi-dev libssl-dev python-dev python-pip python-wheel python-setuptools'; \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         $buildDeps \
         libffi6 \
         libssl1.0.0 \
-        musl \
         python && \
 	pip install --disable-pip-version-check --no-cache-dir docker-py==1.10.3 && \
     # cleanup
