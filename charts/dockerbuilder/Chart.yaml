@@ -1,0 +1,7 @@
+name: dockerbuilder
+home: https://github.com/deis/dockerbuilder
+version: <Will be populated by the ci before publishing the chart>
+description: Deis dockerbuilder builds your app from a Dockerfile inside a Kubernetes pod, used by Deis Workflow.
+maintainers:
+  - name: Deis Team
+    email: engineering@deis.com
