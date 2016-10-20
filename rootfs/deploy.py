@@ -99,7 +99,7 @@ if registryLocation != "on-cluster":
 registry = get_registry_name()
 imageName, imageTag = os.getenv('IMG_NAME').split(":", 1)
 repo = registry + "/" + os.getenv('IMG_NAME')
-stream = client.build(tag=repo, stream=True, decode=True, rm=True, path='/app')
+stream = client.build(tag=repo, stream=True, decode=True, rm=True, pull=True, path='/app')
 log_output(stream, True)
 print("Pushing to registry")
 stream = client.push(registry+'/'+imageName, tag=imageTag, stream=True)
