@@ -1,4 +1,4 @@
-FROM quay.io/deis/base:v0.3.4
+FROM quay.io/deis/base:v0.3.5
 
 RUN buildDeps='gcc git libffi-dev libssl-dev python-dev python-pip python-wheel python-setuptools'; \
     apt-get update && \
