@@ -6,4 +6,4 @@ metadata:
     heritage: deis
 data:
   image: "quay.io/{{.Values.org}}/dockerbuilder:{{.Values.docker_tag}}"
-  pullPolicy: {{ .Values.pull_policy }}
+  pullpolicy: {{ .Values.pull_policy }}
