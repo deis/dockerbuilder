@@ -1,13 +1,13 @@
 FROM quay.io/deis/base:v0.3.5
 
-RUN buildDeps='gcc git libffi-dev libssl-dev python-dev python-pip python-wheel python-setuptools'; \
+RUN buildDeps='gcc git libffi-dev libssl-dev python3-dev python3-pip python3-wheel python3-setuptools'; \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         $buildDeps \
         libffi6 \
         libssl1.0.0 \
-        python && \
-	pip install --disable-pip-version-check --no-cache-dir docker-py==1.10.6 && \
+        python3-minimal && \
+	pip3 install --disable-pip-version-check --no-cache-dir docker-py==1.10.6 && \
     # cleanup
     apt-get purge -y --auto-remove $buildDeps && \
     apt-get autoremove -y && \
@@ -35,4 +35,4 @@ RUN chmod +x /bin/objstorage
 
 COPY . /
 
-CMD ["python", "/deploy.py"]
+CMD ["python3", "/deploy.py"]

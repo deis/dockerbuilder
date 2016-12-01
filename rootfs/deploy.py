@@ -1,5 +1,6 @@
 import docker
 import os
+import sys
 import tarfile
 import time
 import requests
@@ -12,19 +13,21 @@ registryLocation = os.getenv('DEIS_REGISTRY_LOCATION', 'on-cluster')
 def log_output(stream, decode):
     error = False
     for chunk in stream:
+        if isinstance(chunk, bytes):
+            # Convert to dict, since docker-py returns some errors as raw bytes.
+            chunk = eval(chunk)
         if 'error' in chunk:
             error = True
-            if isinstance(chunk, basestring):  # Change "basestring" to "str" for Python3
-                print(chunk.decode('utf-8'))
-            else:
-                print(chunk['error'].decode('utf-8'))
+            print(chunk['error'])
         elif decode:
             stream_chunk = chunk.get('stream')
             if stream_chunk:
-                stream_chunk = stream_chunk.encode('utf-8').strip()
-                print(stream_chunk.replace('\n', ''))
+                # Must handle chunks as bytes to avoid UnicodeEncodeError.
+                encoded_chunk = stream_chunk.encode('utf-8')
+                sys.stdout.buffer.write(encoded_chunk)
         elif DEBUG:
-            print(chunk.decode('utf-8'))
+            print(chunk)
+        sys.stdout.flush()
     if error:
         # HACK: delay so stderr is logged before this dockerbuilder pod exits.
         time.sleep(3)
