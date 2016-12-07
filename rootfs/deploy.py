@@ -58,7 +58,8 @@ def get_registry_name():
     elif registryLocation == "gcr":
         return hostname + "/" + os.getenv('DEIS_REGISTRY_GCS_PROJ_ID')
     else:
-        return os.getenv("DEIS_REGISTRY_SERVICE_HOST") + ":" + os.getenv("DEIS_REGISTRY_SERVICE_PORT")  # noqa: E501
+        return "{}:{}".format(os.getenv("DEIS_REGISTRY_SERVICE_HOST"),
+                              os.getenv("DEIS_REGISTRY_SERVICE_PORT"))
 
 
 def download_file(tar_path):
@@ -79,6 +80,7 @@ def download_file(tar_path):
         "apptar"
     ]
     subprocess.check_call(command)
+
 
 tar_path = os.getenv('TAR_PATH')
 if tar_path:

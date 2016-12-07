@@ -16,7 +16,7 @@ setup-venv:
 test: test-style test-functional
 
 test-style:
-	cd rootfs && flake8 --show-pep8 --show-source --config=setup.cfg .
+	cd rootfs && flake8 --show-source --config=setup.cfg .
 
 test-functional:
 	@echo "Implement functional tests in _tests directory"
