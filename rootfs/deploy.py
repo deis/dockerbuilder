@@ -1,4 +1,5 @@
 import docker
+import json
 import os
 import sys
 import tarfile
@@ -104,7 +105,14 @@ if registryLocation != "on-cluster":
 registry = get_registry_name()
 imageName, imageTag = os.getenv('IMG_NAME').split(":", 1)
 repo = registry + "/" + os.getenv('IMG_NAME')
-stream = client.build(tag=repo, stream=True, decode=True, rm=True, pull=True, path='/app')
+stream = client.build(
+    tag=repo,
+    stream=True,
+    decode=True,
+    rm=True,
+    pull=True,
+    path='/app',
+    buildargs=json.loads(os.getenv('DOCKER_BUILD_ARGS')))
 log_output(stream, True)
 print("Pushing to registry")
 stream = client.push(registry+'/'+imageName, tag=imageTag, stream=True)
