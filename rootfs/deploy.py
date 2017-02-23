@@ -112,7 +112,7 @@ stream = client.build(
     rm=True,
     pull=True,
     path='/app',
-    buildargs=json.loads(os.getenv('DOCKER_BUILD_ARGS')))
+    buildargs=json.loads(os.getenv('DOCKER_BUILD_ARGS', '{}')))
 log_output(stream, True)
 print("Pushing to registry")
 stream = client.push(registry+'/'+imageName, tag=imageTag, stream=True)
