@@ -96,6 +96,14 @@ log("download tar file complete")
 with tarfile.open("apptar", "r:gz") as tar:
     tar.extractall("/app/")
 log("extracting tar file complete")
+buildargs = json.loads(os.getenv('DOCKER_BUILD_ARGS', '{}'))
+# inject docker build args into the Dockerfile so we get around Dockerfiles that don't have things
+# like PORT defined.
+with open("/app/Dockerfile", "a") as dockerfile:
+    # ensure we are on a new line
+    dockerfile.write("\n")
+    for envvar in buildargs:
+        dockerfile.write("ARG {}\n".format(envvar))
 client = docker.Client(version='auto')
 if registryLocation != "on-cluster":
     registry = os.getenv('DEIS_REGISTRY_HOSTNAME', 'https://index.docker.io/v1/')
@@ -112,7 +120,7 @@ stream = client.build(
     rm=True,
     pull=True,
     path='/app',
-    buildargs=json.loads(os.getenv('DOCKER_BUILD_ARGS', '{}')))
+    buildargs=buildargs)
 log_output(stream, True)
 print("Pushing to registry")
 stream = client.push(registry+'/'+imageName, tag=imageTag, stream=True)
