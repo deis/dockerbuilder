@@ -9,7 +9,5 @@ services:
 env:
   - DOCKER_BUILD_FLAGS="--pull --no-cache"
 sudo: required
-install:
-  - pip install -r rootfs/dev_requirements.txt
 script:
   - make test docker-build
