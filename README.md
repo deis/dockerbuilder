@@ -1,6 +1,6 @@
 # Deis Dockerbuilder v2
 
-[![Build Status](https://travis-ci.org/deis/dockerbuilder.svg?branch=master)](https://travis-ci.org/deis/dockerbuilder)
+[![Build Status](https://ci.deis.io/job/dockerbuilder/badge/icon)](https://ci.deis.io/job/dockerbuilder)
 [![codebeat badge](https://codebeat.co/badges/b9039897-fef4-4950-bac8-94503394e6c2)](https://codebeat.co/projects/github-com-deis-dockerbuilder)
 [![Docker Repository on Quay](https://quay.io/repository/deisci/dockerbuilder/status "Docker Repository on Quay")](https://quay.io/repository/deisci/dockerbuilder)
 
